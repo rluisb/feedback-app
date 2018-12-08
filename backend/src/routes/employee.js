@@ -1,12 +1,12 @@
 const errors = require('restify-errors');
-const Employee = require('../models/Employee');
+const { Employee } = require('../models/Employee');
 
 module.exports = (server) => {
   server.get('/employees', async (req, res, next) => {
     try {
       const employees = await Employee.find({});
       res.send(200, employees);
-      next();
+      return next();
     } catch (err) {
       return next(new errors.InvalidContentError(err));
     }
@@ -16,7 +16,7 @@ module.exports = (server) => {
     try {
       const employee = await Employee.findById(req.params.id);
       res.send(200, employee);
-      next();
+      return next();
     } catch (err) {
       return next(new errors.ResourceNotFoundError(`There is no employee with the id of ${req.params.id}`));
     }
@@ -38,7 +38,7 @@ module.exports = (server) => {
     try {
       const newEmployee = await employee.save();
       res.send(201, newEmployee);
-      next();
+      return next();
     } catch (err) {
       return next(new errors.InternalError(err.message));
     }
@@ -52,7 +52,7 @@ module.exports = (server) => {
     try {
       const employee = await Employee.findOneAndUpdate({ _id: req.params.id }, req.body);
       res.send(200, employee);
-      next();
+      return next();
     } catch (err) {
       return next(new errors.ResourceNotFoundError(`There is no employee with the id of ${req.params.id}`));
     }
@@ -62,7 +62,7 @@ module.exports = (server) => {
     try {
       await Employee.findOneAndRemove({ _id: req.params.id });
       res.send(204);
-      next();
+      return next();
     } catch (err) {
       return next(new errors.ResourceNotFoundError(`There is no employee with the id of ${req.params.id}`));
     }

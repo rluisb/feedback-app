@@ -1,12 +1,12 @@
 const errors = require('restify-errors');
-const Manager = require('../models/Manager');
+const { Manager } = require('../models/Manager');
 
 module.exports = (server) => {
   server.get('/managers', async (req, res, next) => {
     try {
       const managers = await Manager.find({});
       res.send(200, managers);
-      next();
+      return next();
     } catch (err) {
       return next(new errors.InvalidContentError(err));
     }
@@ -16,7 +16,7 @@ module.exports = (server) => {
     try {
       const manager = await Manager.findById(req.params.id);
       res.send(200, manager);
-      next();
+      return next();
     } catch (err) {
       return next(new errors.ResourceNotFoundError(`There is no manager with the id of ${req.params.id}`));
     }
@@ -37,7 +37,7 @@ module.exports = (server) => {
     try {
       const newManager = await manager.save();
       res.send(201, newManager);
-      next();
+      return next();
     } catch (err) {
       return next(new errors.InternalError(err.message));
     }
@@ -51,7 +51,7 @@ module.exports = (server) => {
     try {
       const manager = await Manager.findOneAndUpdate({ _id: req.params.id }, req.body);
       res.send(200, manager);
-      next();
+      return next();
     } catch (err) {
       return next(new errors.ResourceNotFoundError(`There is no manager with the id of ${req.params.id}`));
     }
@@ -61,7 +61,7 @@ module.exports = (server) => {
     try {
       await Manager.findOneAndRemove({ _id: req.params.id });
       res.send(204);
-      next();
+      return next();
     } catch (err) {
       return next(new errors.ResourceNotFoundError(`There is no manager with the id of ${req.params.id}`));
     }

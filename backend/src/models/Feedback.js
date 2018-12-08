@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
 const timestamp = require('mongoose-timestamp');
-const Employee = require('../models/Employee');
-const Manager = require('../models/Manager');
+const { EmployeeSchema } = require('../models/Employee');
+const { ManagerSchema } = require('../models/Manager');
 
 const FeedbackSchema = new mongoose.Schema({
-  employee: Employee,
-  manager: Manager,
+  employee: {
+    type: EmployeeSchema,
+  },
+  manager: {
+    type: ManagerSchema,
+  },
   comment: {
     type: String,
     required: true,

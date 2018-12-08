@@ -6,7 +6,7 @@ module.exports = (server) => {
     try {
       const feedbacks = await Feedback.find({});
       res.send(200, feedbacks);
-      next();
+      return next();
     } catch (err) {
       return next(new errors.InvalidContentError(err));
     }
@@ -16,7 +16,7 @@ module.exports = (server) => {
     try {
       const feedback = await Feedback.findById(req.params.id);
       res.send(200, feedback);
-      next();
+      return next();
     } catch (err) {
       return next(new errors.ResourceNotFoundError(`There is no feedback with the id of ${req.params.id}`));
     }
@@ -42,7 +42,7 @@ module.exports = (server) => {
     try {
       const newFeedback = await feedback.save();
       res.send(201, newFeedback);
-      next();
+      return next();
     } catch (err) {
       return next(new errors.InternalError(err.message));
     }
@@ -56,7 +56,7 @@ module.exports = (server) => {
     try {
       const feedback = await Feedback.findOneAndUpdate({ _id: req.params.id }, req.body);
       res.send(200, feedback);
-      next();
+      return next();
     } catch (err) {
       return next(new errors.ResourceNotFoundError(`There is no feedback with the id of ${req.params.id}`));
     }
@@ -66,21 +66,7 @@ module.exports = (server) => {
     try {
       await Feedback.findOneAndRemove({ _id: req.params.id });
       res.send(204);
-      next();
-    } catch (err) {
-      return next(new errors.ResourceNotFoundError(`There is no feedback with the id of ${req.params.id}`));
-    }
-  });
-
-  server.patch('/feedbacks/:id/rate', async (req, res, next) => {
-    if (!req.is('application/json')) {
-      return next(new errors.InvalidContentError('Expects application/json'));
-    }
-
-    try {
-      const feedback = await Feedback.findOneAndUpdate({ _id: req.params.id }, req.body);
-      res.send(200, feedback);
-      next();
+      return next();
     } catch (err) {
       return next(new errors.ResourceNotFoundError(`There is no feedback with the id of ${req.params.id}`));
     }

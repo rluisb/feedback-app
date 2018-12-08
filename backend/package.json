@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "cucumber-js",
+    "test": "mocha --timeout 10000",
     "lint": "./node_modules/.bin/eslint *.js"
   },
   "keywords": [
@@ -23,7 +23,6 @@
     "restify-errors": "^6.1.1"
   },
   "devDependencies": {
-    "cucumber": "^5.0.3",
     "eslint": "^5.10.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
