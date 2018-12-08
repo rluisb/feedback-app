@@ -4,9 +4,9 @@
   "description": "A backend nodejs app",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js",
-    "test": "mocha --timeout 10000",
+    "start": "node $NODE_DEBUG_OPTION app.js",
+    "dev": "nodemon $NODE_DEBUG_OPTION app.js",
+    "test": "mocha --timeout 120000",
     "lint": "./node_modules/.bin/eslint *.js"
   },
   "keywords": [
@@ -23,11 +23,15 @@
     "restify-errors": "^6.1.1"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
     "eslint": "^5.10.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
+    "mocha": "^5.2.0",
+    "mockgoose": "^7.3.5",
     "nodemon": "^1.18.7"
   }
 }
