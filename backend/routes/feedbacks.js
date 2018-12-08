@@ -69,6 +69,20 @@ module.exports = (server) => {
     }
   })
 
+  server.patch('/feedbacks/:id/rate', async(req, res, next) => {
+      if (!req.is('application/json')) {
+        return next(new errors.InvalidContentError('Expects application/json'))
+      }
+
+      try {
+        const feedback = await Feedback.findOneAndUpdate({ _id: req.params.id}, req.body)
+        res.send(200, feedback)
+        next()
+     } catch (err) {
+      return next(new errors.ResourceNotFoundError(`There is no feedback with the id of ${req.params.id}`))
+     }
+  })
+
 }
 
 
