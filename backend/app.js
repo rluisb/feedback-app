@@ -1,24 +1,29 @@
-const restify = require('restify')
-const mongoose = require('mongoose')
-const config = require('./config')
+const restify = require('restify');
+const errors = require('restify-errors');
+const mongoose = require('mongoose');
+const config = require('./config');
+const feedback = require('./src/routes/feedback');
+const employee = require('./src/routes/employee');
+const manager = require('./src/routes/manager');
 
-const server = restify.createServer()
+const server = restify.createServer();
 
-//Middleware
-server.use(restify.plugins.bodyParser())
+// Middleware
+server.use(restify.plugins.bodyParser());
 
 server.listen(config.PORT, () => {
   mongoose.connect(
     config.MONGODB_URI,
-    { useNewUrlParser: true }
-  )
-})
+    { useNewUrlParser: true },
+  );
+});
 
-const db = mongoose.connection
+const db = mongoose.connection;
 
-db.on('error', (err) => console.log('Error on db connection', err))
+db.on('error', err => new errors.InternalError(err));
 
 db.once('open', () => {
-  require('./routes/feedbacks')(server)
-  console.log(`Server started on port ${config.PORT}`)
-})
+  feedback(server);
+  employee(server);
+  manager(server);
+});
