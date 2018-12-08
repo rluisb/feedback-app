@@ -12,6 +12,17 @@ module.exports = (server) => {
     }
   })
 
+  server.get('/feedbacks/:id', async(req, res, next) => {
+    try {
+      const feedback = await Feedback.findById(req.params.id)
+      res.send(feedback)
+      next()
+    } catch (err) {
+      return next(new errors.ResourceNotFoundError(`There is no feedback with the id of ${req.params.id}`))
+    }
+  })
+
+
   server.post('/feedbacks', async(req, res, next) => {
       if (!req.is('application/json')) {
         return next(new errors.InvalidContentError('Expects application/json'))
@@ -33,4 +44,31 @@ module.exports = (server) => {
         return next(new errors.InternalError(err.message))
       } 
   })
+
+  server.put('/feedbacks/:id', async(req, res, next) => {
+      if (!req.is('application/json')) {
+        return next(new errors.InvalidContentError('Expects application/json'))
+      }
+
+      try {
+        const feedback = await Feedback.findOneAndUpdate({ _id: req.params.id}, req.body)
+        res.send(200, feedback)
+        next()
+     } catch (err) {
+      return next(new errors.ResourceNotFoundError(`There is no feedback with the id of ${req.params.id}`))
+     }
+  })
+
+  server.del('/feedbacks/:id', async(req, res, next) => {
+    try {
+      const feedback = await Feedback.findOneAndRemove({ _id: req.params.id})
+      res.send(204)
+      next()
+    } catch (err) {
+      return next(new errors.ResourceNotFoundError(`There is no feedback with the id of ${req.params.id}`))
+    }
+  })
+
 }
+
+
